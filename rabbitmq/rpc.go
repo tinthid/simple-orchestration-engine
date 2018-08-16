@@ -7,9 +7,9 @@ import (
 	"github.com/streadway/amqp"
 )
 
-func ClientRPC(message []byte, exchangeName string, topicName string, corrID string) []byte {
+func (r *RabbitMQ) ClientRPC(message []byte, exchangeName string, topicName string, corrID string) []byte {
 
-	ch, err := RabbitConn.Channel()
+	ch, err := r.RabbitConn.Channel()
 	defer ch.Close()
 
 	err = ch.ExchangeDeclare(
@@ -59,8 +59,8 @@ func ClientRPC(message []byte, exchangeName string, topicName string, corrID str
 	return nil
 }
 
-func ServerRPC(exchangeName string, topicName string, queueName string, fn func(amqp.Delivery) []byte) {
-	ch, err := RabbitConn.Channel()
+func (r *RabbitMQ) ServerRPC(exchangeName string, topicName string, queueName string, fn func(amqp.Delivery) []byte) {
+	ch, err := r.RabbitConn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
 

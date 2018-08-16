@@ -10,7 +10,9 @@ import (
 	"github.com/streadway/amqp"
 )
 
-var RabbitConn *amqp.Connection
+type RabbitMQ struct {
+	RabbitConn *amqp.Connection
+}
 
 func failOnError(err error, msg string) {
 	if err != nil {
@@ -19,11 +21,12 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func RabbitMQInit() {
+func CreateRabbitMQ() *RabbitMQ, error {
+	rabbitMQ := new(RabbitMQ)
 	jsonFile, err := os.Open("config/rabbitmq.json")
-	
+
 	if err != nil {
-		fmt.Println(err) 	
+		fmt.Println(err)
 	}
 	defer jsonFile.Close()
 
@@ -34,6 +37,8 @@ func RabbitMQInit() {
 
 	amqpURL := rabbitmqJson["rabbitmq_server"].(string)
 
-	RabbitConn, err = amqp.Dial(amqpURL)
+	rabbitMQ.RabbitConn, err = amqp.Dial(amqpURL)
 	failOnError(err, "Failed to connect to RabbitMQ")
+
+	return rabbitMQ, error
 }

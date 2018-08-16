@@ -1,0 +1,5 @@
+{
+	"redis_endpoint": "redis-16171.c1.asia-northeast1-1.gce.cloud.redislabs.com:16171",
+	"password": "hvxbN9DevnEj6Q8ksRiYUHu0tF9liYRR",
+	"database_name": "workflows"
+}
