@@ -21,7 +21,7 @@ func failOnError(err error, msg string) {
 	}
 }
 
-func CreateRabbitMQ() *RabbitMQ, error {
+func CreateRabbitMQ() (*RabbitMQ, error) {
 	rabbitMQ := new(RabbitMQ)
 	jsonFile, err := os.Open("config/rabbitmq.json")
 
@@ -40,5 +40,5 @@ func CreateRabbitMQ() *RabbitMQ, error {
 	rabbitMQ.RabbitConn, err = amqp.Dial(amqpURL)
 	failOnError(err, "Failed to connect to RabbitMQ")
 
-	return rabbitMQ, error
+	return rabbitMQ, err
 }

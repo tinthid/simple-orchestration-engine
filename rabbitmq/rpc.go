@@ -11,7 +11,7 @@ func (r *RabbitMQ) ClientRPC(message []byte, exchangeName string, topicName stri
 
 	ch, err := r.RabbitConn.Channel()
 	defer ch.Close()
-
+	
 	err = ch.ExchangeDeclare(
 		exchangeName, // name
 		"topic",      // type
