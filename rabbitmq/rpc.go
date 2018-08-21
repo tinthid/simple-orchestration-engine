@@ -11,7 +11,7 @@ func (r *RabbitMQ) ClientRPC(message []byte, exchangeName string, topicName stri
 
 	ch, err := r.RabbitConn.Channel()
 	defer ch.Close()
-	
+
 	err = ch.ExchangeDeclare(
 		exchangeName, // name
 		"topic",      // type
@@ -59,7 +59,7 @@ func (r *RabbitMQ) ClientRPC(message []byte, exchangeName string, topicName stri
 	return nil
 }
 
-func (r *RabbitMQ) ServerRPC(exchangeName string, topicName string, queueName string, fn func(amqp.Delivery) []byte) {
+func (r *RabbitMQ) ServerRPC(exchangeName string, topicName string, queueName string, fn func([]byte) []byte) {
 	ch, err := r.RabbitConn.Channel()
 	failOnError(err, "Failed to open a channel")
 	defer ch.Close()
@@ -117,7 +117,7 @@ func (r *RabbitMQ) ServerRPC(exchangeName string, topicName string, queueName st
 	go func() {
 		for d := range msgs {
 			go func(d amqp.Delivery) {
-				result := fn(d)
+				result := fn(d.Body)
 				fmt.Println(d.ReplyTo)
 				err = ch.Publish(
 					"",        // exchange
